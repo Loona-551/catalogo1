@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Zapatos</title>
+  <script src="jquery.min.js"></script>
+  <script src="turn.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #flipbook {
+      width: 90%;
+      max-width: 900px;
+      height: 600px;
+      margin: 20px auto;
+    }
+    #flipbook .page {
+      width: 100%;
+      height: 100%;
+    }
+    #flipbook .page img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      cursor: zoom-in;
+    }
+    .controls {
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #333;
+      color: white;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #555;
+    }
+    .contact {
+      margin: 20px;
+      text-align: center;
+    }
+    .contact a, .contact span {
+      display: block;
+      margin: 5px 0;
+      color: #333;
+      font-size: 18px;
+      text-decoration: none;
+    }
+    /* Zoom */
+    .zoomed {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: zoom-out;
+      z-index: 9999;
+    }
+    .zoomed img {
+      max-width: 95%;
+      max-height: 95%;
+    }
+    /* Responsive ajustes */
+    @media (max-width: 768px) {
+      #flipbook {
+        height: 400px;
+      }
+      button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Catálogo de Zapatos</h1>
+
+  <div id="flipbook"></div>
+
+  <div class="controls">
+    <button id="prev">⬅ Anterior</button>
+    <button id="next">Siguiente ➡</button>
+  </div>
+
+  <div class="contact">
+    <span>📱 WhatsApp: +52 123 456 7890</span>
+    <a href="https://facebook.com/TuPagina" target="_blank">📘 Facebook</a>
+  </div>
+
+  <script>
+    // Páginas del catálogo (ajusta el número máximo de páginas según tus imágenes)
+    const totalPages = 10; // 👉 cámbialo al total de imágenes
+    const flipbook = $("#flipbook");
+
+    // Generar páginas automáticamente
+    for (let i = 1; i <= totalPages; i++) {
+      const num = String(i).padStart(3, "0"); // formato pagina_001
+      flipbook.append(`<div class="page"><img src="cat1/pagina_${num}.jpg" alt="Página ${i}"></div>`);
+    }
+
+    // Inicializar flipbook
+    flipbook.turn({
+      width: 900,
+      height: 600,
+      autoCenter: true,
+      display: 'double'
+    });
+
+    // Botones de navegación
+    $("#prev").click(() => flipbook.turn("previous"));
+    $("#next").click(() => flipbook.turn("next"));
+
+    // Zoom al hacer clic en una página
+    $(document).on("click", "#flipbook .page img", function () {
+      const src = $(this).attr("src");
+      $("body").append(`<div class="zoomed"><img src="${src}"></div>`);
+    });
+
+    // Salir del zoom
+    $(document).on("click", ".zoomed", function () {
+      $(this).remove();
+    });
+  </script>
+
+</body>
+</html>
